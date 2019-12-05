@@ -1,0 +1,21 @@
+{
+    "name": "ast-playground",
+    "version": "1.0.0",
+    "description": "",
+    "main": "test-ast.js",
+    "scripts": {
+        "dev": "webpack-dev-server --content-base dist/ --open",
+        "watch": "webpack -w"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "acorn": "^7.1.0",
+        "acorn-walk": "^7.0.0",
+        "fs": "0.0.1-security",
+        "webpack": "^4.32.2"
+    },
+    "devDependencies": {
+        "webpack-cli": "^3.3.10"
+    }
+}
