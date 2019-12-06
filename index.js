@@ -4,15 +4,21 @@ const walk = require('acorn-walk');
 const { convertEvents } = require('./sdkToEventsApiConverter');
 const { createEventObject } = require('./createEventObject');
 var Types = require('./types');
+const jsdom = require('jsdom');
+const { JSDOM } = jsdom;
+const { window } = new JSDOM();
+global.window = window;
+const mParticle = require('@mparticle/web-sdk');
+window.mParticle = mParticle;
 
-var mParticle = {
-    logEvent: function(a, b, c, d, e, f) {
-        console.log(a, b, c, d, e, f);
-    },
-    EventType: {
-        Other: 10,
-    },
-};
+// var mParticle = {
+//     logEvent: function(a, b, c, d, e, f) {
+//         console.log(a, b, c, d, e, f);
+//     },
+//     EventType: {
+//         Other: 10,
+//     },
+// };
 
 fs.readFile('./test-ast.js', function(err, contents) {
     walk.simple(Parser.parse(contents), {
@@ -27,15 +33,13 @@ fs.readFile('./test-ast.js', function(err, contents) {
                         switch (arg.type) {
                             case 'Literal':
                                 args.push(arg.raw);
-                                console.log(arg.raw);
-                                console.log(arg.value);
                                 event.name = arg.value;
                                 return;
                             case 'MemberExpression':
                                 args.push(
                                     `${arg.object.object.name}.${arg.object.property.name}.${arg.property.name}`
                                 );
-                                event.messageType = eval(
+                                event.eventType = eval(
                                     `${arg.object.object.name}.${arg.object.property.name}.${arg.property.name}`
                                 );
                                 return;
@@ -55,18 +59,18 @@ fs.readFile('./test-ast.js', function(err, contents) {
                                 return;
                         }
                     });
-                    console.log(args);
-                    console.log(event);
 
                     var sdkEvent = createEventObject(event, {
                         sessionId: 'hi',
                         SDKConfig: {},
                     });
-                    console.log(sdkEvent);
+
                     var batch = convertEvents('asdf', [sdkEvent], {
                         _Helpers: { generateUniqueId: function() {} },
                     });
+                    console.log('---batch---');
                     console.log(batch);
+                    console.log(batch.events.forEach(x => console.log(x)));
                     // eval(
                     //     `${node.expression.callee.object.name}.${node.expression.callee.property.name}.apply(null, [${args}])`
                     // );

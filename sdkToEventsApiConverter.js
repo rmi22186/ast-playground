@@ -27,7 +27,10 @@ exports.__esModule = true;
 //     MParticleWebSDK,
 // } from './sdkRuntimeModels';
 // import * as EventsApi from './eventsApiModels';
-var types_1 = require('./types');
+var Types = require('./types');
+var jsdom = require('jsdom');
+var JSDOM = jsdom.JSDOM;
+var window = new JSDOM().window;
 function convertEvents(mpid, sdkEvents, mpInstance) {
     if (!mpid) {
         return null;
@@ -123,34 +126,34 @@ function convertUserIdentities(sdkUserIdentities) {
     ) {
         var identity = sdkUserIdentities_1[_i];
         switch (identity.Type) {
-            case types_1['default'].IdentityType.CustomerId:
+            case Types.IdentityType.CustomerId:
                 batchIdentities.customer_id = identity.Identity;
                 break;
-            case types_1['default'].IdentityType.Email:
+            case Types.IdentityType.Email:
                 batchIdentities.email = identity.Identity;
                 break;
-            case types_1['default'].IdentityType.Facebook:
+            case Types.IdentityType.Facebook:
                 batchIdentities.facebook = identity.Identity;
                 break;
-            case types_1['default'].IdentityType.FacebookCustomAudienceId:
+            case Types.IdentityType.FacebookCustomAudienceId:
                 batchIdentities.facebook_custom_audience_id = identity.Identity;
                 break;
-            case types_1['default'].IdentityType.Google:
+            case Types.IdentityType.Google:
                 batchIdentities.google = identity.Identity;
                 break;
-            case types_1['default'].IdentityType.Microsoft:
+            case Types.IdentityType.Microsoft:
                 batchIdentities.microsoft = identity.Identity;
                 break;
-            case types_1['default'].IdentityType.Other:
+            case Types.IdentityType.Other:
                 batchIdentities.other = identity.Identity;
                 break;
-            case types_1['default'].IdentityType.Other2:
+            case Types.IdentityType.Other2:
                 batchIdentities.other_id_2 = identity.Identity;
                 break;
-            case types_1['default'].IdentityType.Other3:
+            case Types.IdentityType.Other3:
                 batchIdentities.other_id_3 = identity.Identity;
                 break;
-            case types_1['default'].IdentityType.Other4:
+            case Types.IdentityType.Other4:
                 batchIdentities.other_id_4 = identity.Identity;
                 break;
             default:
@@ -161,35 +164,32 @@ function convertUserIdentities(sdkUserIdentities) {
 }
 exports.convertUserIdentities = convertUserIdentities;
 function convertEvent(sdkEvent) {
-    console.log('types');
-    // console.log(sdkEvent.EventDataType);
-    console.log(types_1);
     if (!sdkEvent) {
         return null;
     }
     switch (sdkEvent.EventDataType) {
-        case types_1['default'].MessageType.AppStateTransition:
+        case Types.MessageType.AppStateTransition:
             return convertAST(sdkEvent);
-        case types_1['default'].MessageType.Commerce:
+        case Types.MessageType.Commerce:
             return convertCommerceEvent(sdkEvent);
-        case types_1['default'].MessageType.CrashReport:
+        case Types.MessageType.CrashReport:
             return convertCrashReportEvent(sdkEvent);
-        case types_1['default'].MessageType.OptOut:
+        case Types.MessageType.OptOut:
             return convertOptOutEvent(sdkEvent);
-        case types_1['default'].MessageType.PageEvent:
+        case Types.MessageType.PageEvent:
             return convertCustomEvent(sdkEvent);
-        case types_1['default'].MessageType.PageView:
+        case Types.MessageType.PageView:
             return convertPageViewEvent(sdkEvent);
-        case types_1['default'].MessageType.Profile:
+        case Types.MessageType.Profile:
             //deprecated and not supported by the web SDK
             return null;
-        case types_1['default'].MessageType.SessionEnd:
+        case Types.MessageType.SessionEnd:
             return convertSessionEndEvent(sdkEvent);
-        case types_1['default'].MessageType.SessionStart:
+        case Types.MessageType.SessionStart:
             return convertSessionStartEvent(sdkEvent);
-        case types_1['default'].MessageType.UserAttributeChange:
+        case Types.MessageType.UserAttributeChange:
             return convertUserAttributeChangeEvent(sdkEvent);
-        case types_1['default'].MessageType.UserIdentityChange:
+        case Types.MessageType.UserIdentityChange:
             return convertUserIdentityChangeEvent(sdkEvent);
         default:
             break;
@@ -449,47 +449,47 @@ function convertCustomEvent(sdkEvent) {
 exports.convertCustomEvent = convertCustomEvent;
 function convertSdkEventType(sdkEventType) {
     switch (sdkEventType) {
-        case types_1['default'].EventType.Other:
+        case Types.EventType.Other:
             return 'other';
-        case types_1['default'].EventType.Location:
+        case Types.EventType.Location:
             return 'location';
-        case types_1['default'].EventType.Navigation:
+        case Types.EventType.Navigation:
             return 'navigation';
-        case types_1['default'].EventType.Search:
+        case Types.EventType.Search:
             return 'search';
-        case types_1['default'].EventType.Social:
+        case Types.EventType.Social:
             return 'social';
-        case types_1['default'].EventType.Transaction:
+        case Types.EventType.Transaction:
             return 'transaction';
-        case types_1['default'].EventType.UserContent:
+        case Types.EventType.UserContent:
             return 'user_content';
-        case types_1['default'].EventType.UserPreference:
+        case Types.EventType.UserPreference:
             return 'user_preference';
-        case types_1['default'].CommerceEventType.ProductAddToCart:
+        case Types.CommerceEventType.ProductAddToCart:
             return 'add_to_cart';
-        case types_1['default'].CommerceEventType.ProductAddToWishlist:
+        case Types.CommerceEventType.ProductAddToWishlist:
             return 'add_to_wishlist';
-        case types_1['default'].CommerceEventType.ProductCheckout:
+        case Types.CommerceEventType.ProductCheckout:
             return 'checkout';
-        case types_1['default'].CommerceEventType.ProductCheckoutOption:
+        case Types.CommerceEventType.ProductCheckoutOption:
             return 'checkout_option';
-        case types_1['default'].CommerceEventType.ProductClick:
+        case Types.CommerceEventType.ProductClick:
             return 'click';
-        case types_1['default'].CommerceEventType.ProductImpression:
+        case Types.CommerceEventType.ProductImpression:
             return 'impression';
-        case types_1['default'].CommerceEventType.ProductPurchase:
+        case Types.CommerceEventType.ProductPurchase:
             return 'purchase';
-        case types_1['default'].CommerceEventType.ProductRefund:
+        case Types.CommerceEventType.ProductRefund:
             return 'refund';
-        case types_1['default'].CommerceEventType.ProductRemoveFromCart:
+        case Types.CommerceEventType.ProductRemoveFromCart:
             return 'remove_from_cart';
-        case types_1['default'].CommerceEventType.ProductRemoveFromWishlist:
+        case Types.CommerceEventType.ProductRemoveFromWishlist:
             return 'remove_from_wishlist';
-        case types_1['default'].CommerceEventType.ProductViewDetail:
+        case Types.CommerceEventType.ProductViewDetail:
             return 'view_detail';
-        case types_1['default'].CommerceEventType.PromotionClick:
+        case Types.CommerceEventType.PromotionClick:
             return 'promotion_click';
-        case types_1['default'].CommerceEventType.PromotionView:
+        case Types.CommerceEventType.PromotionView:
             return 'promotion_view';
         default:
             return 'unknown';

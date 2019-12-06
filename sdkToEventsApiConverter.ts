@@ -9,7 +9,11 @@
 //     MParticleWebSDK,
 // } from './sdkRuntimeModels';
 // import * as EventsApi from './eventsApiModels';
-import Types from './types';
+import * as Types from './types';
+const jsdom = require('jsdom');
+const { JSDOM } = jsdom;
+
+const { window } = new JSDOM();
 
 export function convertEvents(
     mpid: string,
