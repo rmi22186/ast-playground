@@ -1,20 +1,15 @@
-'use strict';
-var __assign =
-    (this && this.__assign) ||
-    function() {
-        __assign =
-            Object.assign ||
-            function(t) {
-                for (var s, i = 1, n = arguments.length; i < n; i++) {
-                    s = arguments[i];
-                    for (var p in s)
-                        if (Object.prototype.hasOwnProperty.call(s, p))
-                            t[p] = s[p];
-                }
-                return t;
-            };
-        return __assign.apply(this, arguments);
+"use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
     };
+    return __assign.apply(this, arguments);
+};
 exports.__esModule = true;
 // import {
 //     SDKEvent,
@@ -27,10 +22,10 @@ exports.__esModule = true;
 //     MParticleWebSDK,
 // } from './sdkRuntimeModels';
 // import * as EventsApi from './eventsApiModels';
-var Types = require('./types');
-var jsdom = require('jsdom');
-var JSDOM = jsdom.JSDOM;
-var window = new JSDOM().window;
+var Types = require("./types");
+// const jsdom = require('jsdom');
+// const { JSDOM } = jsdom;
+// const { window } = new JSDOM();
 function convertEvents(mpid, sdkEvents, mpInstance) {
     if (!mpid) {
         return null;
@@ -62,12 +57,12 @@ function convertEvents(mpid, sdkEvents, mpInstance) {
         mp_deviceid: lastEvent.DeviceId,
         sdk_version: lastEvent.SDKVersion,
         application_info: {
-            application_version: lastEvent.AppVersion,
+            application_version: lastEvent.AppVersion
         },
         device_info: {
             platform: 'web',
             screen_width: window.screen.width,
-            screen_height: window.screen.height,
+            screen_height: window.screen.height
         },
         user_attributes: lastEvent.UserAttributes,
         user_identities: convertUserIdentities(lastEvent.UserIdentities),
@@ -78,9 +73,9 @@ function convertEvents(mpid, sdkEvents, mpInstance) {
                 plan_version: lastEvent.DataPlan
                     ? lastEvent.DataPlan.PlanVersion
                     : null,
-                plan_id: lastEvent.DataPlan ? lastEvent.DataPlan.PlanId : null,
-            },
-        },
+                plan_id: lastEvent.DataPlan ? lastEvent.DataPlan.PlanId : null
+            }
+        }
     };
     return upload;
 }
@@ -90,7 +85,7 @@ function convertConsentState(sdkConsentState) {
         return null;
     }
     var consentState = {
-        gdpr: convertGdprConsentState(sdkConsentState.getGDPRConsentState()),
+        gdpr: convertGdprConsentState(sdkConsentState.getGDPRConsentState())
     };
     return consentState;
 }
@@ -107,7 +102,7 @@ function convertGdprConsentState(sdkGdprConsentState) {
                 hardware_id: sdkGdprConsentState[purpose].HardwareId,
                 document: sdkGdprConsentState[purpose].ConsentDocument,
                 timestamp_unixtime_ms: sdkGdprConsentState[purpose].Timestamp,
-                location: sdkGdprConsentState[purpose].Location,
+                location: sdkGdprConsentState[purpose].Location
             };
         }
     }
@@ -119,11 +114,7 @@ function convertUserIdentities(sdkUserIdentities) {
         return null;
     }
     var batchIdentities = {};
-    for (
-        var _i = 0, sdkUserIdentities_1 = sdkUserIdentities;
-        _i < sdkUserIdentities_1.length;
-        _i++
-    ) {
+    for (var _i = 0, sdkUserIdentities_1 = sdkUserIdentities; _i < sdkUserIdentities_1.length; _i++) {
         var identity = sdkUserIdentities_1[_i];
         switch (identity.Type) {
             case Types.IdentityType.CustomerId:
@@ -232,9 +223,7 @@ function convertProductAction(sdkEvent) {
         return null;
     }
     var productAction = {
-        action: convertProductActionType(
-            sdkEvent.ProductAction.ProductActionType
-        ),
+        action: convertProductActionType(sdkEvent.ProductAction.ProductActionType),
         checkout_step: sdkEvent.ProductAction.CheckoutStep,
         checkout_options: sdkEvent.ProductAction.CheckoutOptions,
         transaction_id: sdkEvent.ProductAction.TransactionId,
@@ -243,7 +232,7 @@ function convertProductAction(sdkEvent) {
         tax_amount: sdkEvent.ProductAction.TaxAmount,
         shipping_amount: sdkEvent.ProductAction.ShippingAmount,
         coupon_code: sdkEvent.ProductAction.CouponCode,
-        products: convertProducts(sdkEvent.ProductAction.ProductList),
+        products: convertProducts(sdkEvent.ProductAction.ProductList)
     };
     return productAction;
 }
@@ -253,11 +242,7 @@ function convertProducts(sdkProducts) {
         return null;
     }
     var products = [];
-    for (
-        var _i = 0, sdkProducts_1 = sdkProducts;
-        _i < sdkProducts_1.length;
-        _i++
-    ) {
+    for (var _i = 0, sdkProducts_1 = sdkProducts; _i < sdkProducts_1.length; _i++) {
         var sdkProduct = sdkProducts_1[_i];
         var product = {
             id: sdkProduct.Sku,
@@ -270,7 +255,7 @@ function convertProducts(sdkProducts) {
             price: sdkProduct.Price,
             quantity: sdkProduct.Quantity,
             coupon_code: sdkProduct.CouponCode,
-            custom_attributes: sdkProduct.Attributes,
+            custom_attributes: sdkProduct.Attributes
         };
         products.push(product);
     }
@@ -282,8 +267,9 @@ function convertPromotionAction(sdkEvent) {
         return null;
     }
     var promotionAction = {
-        action: sdkEvent.PromotionAction.PromotionActionType,
-        promotions: convertPromotions(sdkEvent.PromotionAction.PromotionList),
+        action: sdkEvent.PromotionAction
+            .PromotionActionType,
+        promotions: convertPromotions(sdkEvent.PromotionAction.PromotionList)
     };
     return promotionAction;
 }
@@ -293,17 +279,13 @@ function convertPromotions(sdkPromotions) {
         return null;
     }
     var promotions = [];
-    for (
-        var _i = 0, sdkPromotions_1 = sdkPromotions;
-        _i < sdkPromotions_1.length;
-        _i++
-    ) {
+    for (var _i = 0, sdkPromotions_1 = sdkPromotions; _i < sdkPromotions_1.length; _i++) {
         var sdkPromotion = sdkPromotions_1[_i];
         var promotion = {
             id: sdkPromotion.Id,
             name: sdkPromotion.Name,
             creative: sdkPromotion.Creative,
-            position: sdkPromotion.Position,
+            position: sdkPromotion.Position
         };
         promotions.push(promotion);
     }
@@ -319,7 +301,7 @@ function convertImpressions(sdkEvent) {
         var sdkImpression = _a[_i];
         var impression = {
             product_impression_list: sdkImpression.ProductImpressionList,
-            products: convertProducts(sdkImpression.ProductList),
+            products: convertProducts(sdkImpression.ProductList)
         };
         impressions.push(impression);
     }
@@ -327,15 +309,13 @@ function convertImpressions(sdkEvent) {
 }
 exports.convertImpressions = convertImpressions;
 function convertShoppingCart(sdkEvent) {
-    if (
-        !sdkEvent.ShoppingCart ||
+    if (!sdkEvent.ShoppingCart ||
         !sdkEvent.ShoppingCart.ProductList ||
-        !sdkEvent.ShoppingCart.ProductList.length
-    ) {
+        !sdkEvent.ShoppingCart.ProductList.length) {
         return null;
     }
     var shoppingCart = {
-        products: convertProducts(sdkEvent.ShoppingCart.ProductList),
+        products: convertProducts(sdkEvent.ShoppingCart.ProductList)
     };
     return shoppingCart;
 }
@@ -348,24 +328,24 @@ function convertCommerceEvent(sdkEvent) {
         promotion_action: convertPromotionAction(sdkEvent),
         product_impressions: convertImpressions(sdkEvent),
         shopping_cart: convertShoppingCart(sdkEvent),
-        currency_code: sdkEvent.CurrencyCode,
+        currency_code: sdkEvent.CurrencyCode
     };
     commerceEventData = Object.assign(commerceEventData, commonEventData);
     return {
         event_type: 'commerce_event',
-        data: commerceEventData,
+        data: commerceEventData
     };
 }
 exports.convertCommerceEvent = convertCommerceEvent;
 function convertCrashReportEvent(sdkEvent) {
     var commonEventData = convertBaseEventData(sdkEvent);
     var crashReportEventData = {
-        message: sdkEvent.EventName,
+        message: sdkEvent.EventName
     };
     crashReportEventData = Object.assign(crashReportEventData, commonEventData);
     return {
         event_type: 'crash_report',
-        data: crashReportEventData,
+        data: crashReportEventData
     };
 }
 exports.convertCrashReportEvent = convertCrashReportEvent;
@@ -374,37 +354,34 @@ function convertAST(sdkEvent) {
     var astEventData = {
         application_transition_type: 'application_initialized',
         is_first_run: sdkEvent.IsFirstRun,
-        is_upgrade: false,
+        is_upgrade: false
     };
     astEventData = Object.assign(astEventData, commonEventData);
     return {
         event_type: 'application_state_transition',
-        data: astEventData,
+        data: astEventData
     };
 }
 exports.convertAST = convertAST;
 function convertSessionEndEvent(sdkEvent) {
     var commonEventData = convertBaseEventData(sdkEvent);
     var sessionEndEventData = {
-        session_duration_ms: sdkEvent.SessionLength,
+        session_duration_ms: sdkEvent.SessionLength
     };
     sessionEndEventData = Object.assign(sessionEndEventData, commonEventData);
     return {
         event_type: 'session_end',
-        data: sessionEndEventData,
+        data: sessionEndEventData
     };
 }
 exports.convertSessionEndEvent = convertSessionEndEvent;
 function convertSessionStartEvent(sdkEvent) {
     var commonEventData = convertBaseEventData(sdkEvent);
     var sessionStartEventData = {};
-    sessionStartEventData = Object.assign(
-        sessionStartEventData,
-        commonEventData
-    );
+    sessionStartEventData = Object.assign(sessionStartEventData, commonEventData);
     return {
         event_type: 'session_start',
-        data: sessionStartEventData,
+        data: sessionStartEventData
     };
 }
 exports.convertSessionStartEvent = convertSessionStartEvent;
@@ -412,24 +389,24 @@ function convertPageViewEvent(sdkEvent) {
     var commonEventData = convertBaseEventData(sdkEvent);
     var screenViewEventData = {
         custom_flags: sdkEvent.CustomFlags,
-        screen_name: sdkEvent.EventName,
+        screen_name: sdkEvent.EventName
     };
     screenViewEventData = Object.assign(screenViewEventData, commonEventData);
     return {
         event_type: 'screen_view',
-        data: screenViewEventData,
+        data: screenViewEventData
     };
 }
 exports.convertPageViewEvent = convertPageViewEvent;
 function convertOptOutEvent(sdkEvent) {
     var commonEventData = convertBaseEventData(sdkEvent);
     var optOutEventData = {
-        is_opted_out: sdkEvent.OptOut,
+        is_opted_out: sdkEvent.OptOut
     };
     optOutEventData = Object.assign(optOutEventData, commonEventData);
     return {
         event_type: 'opt_out',
-        data: optOutEventData,
+        data: optOutEventData
     };
 }
 exports.convertOptOutEvent = convertOptOutEvent;
@@ -438,12 +415,12 @@ function convertCustomEvent(sdkEvent) {
     var customEventData = {
         custom_event_type: convertSdkEventType(sdkEvent.EventCategory),
         custom_flags: sdkEvent.CustomFlags,
-        event_name: sdkEvent.EventName,
+        event_name: sdkEvent.EventName
     };
     customEventData = Object.assign(customEventData, commonEventData);
     return {
         event_type: 'custom_event',
-        data: customEventData,
+        data: customEventData
     };
 }
 exports.convertCustomEvent = convertCustomEvent;
@@ -502,7 +479,7 @@ function convertBaseEventData(sdkEvent) {
         session_uuid: sdkEvent.SessionId,
         session_start_unixtime_ms: sdkEvent.SessionStartDate,
         custom_attributes: sdkEvent.EventAttributes,
-        location: sdkEvent.Location,
+        location: sdkEvent.Location
     };
     return commonEventData;
 }
@@ -511,47 +488,38 @@ function convertUserAttributeChangeEvent(sdkEvent) {
     var commonEventData = convertBaseEventData(sdkEvent);
     var userAttributeChangeEvent = {
         user_attribute_name: sdkEvent.UserAttributeChanges.UserAttributeName,
-        new: sdkEvent.UserAttributeChanges.New,
+        "new": sdkEvent.UserAttributeChanges.New,
         old: sdkEvent.UserAttributeChanges.Old,
         deleted: sdkEvent.UserAttributeChanges.Deleted,
-        is_new_attribute: sdkEvent.UserAttributeChanges.IsNewAttribute,
+        is_new_attribute: sdkEvent.UserAttributeChanges.IsNewAttribute
     };
-    userAttributeChangeEvent = __assign(
-        {},
-        userAttributeChangeEvent,
-        commonEventData
-    );
+    userAttributeChangeEvent = __assign({}, userAttributeChangeEvent, commonEventData);
     return {
         event_type: 'user_attribute_change',
-        data: userAttributeChangeEvent,
+        data: userAttributeChangeEvent
     };
 }
 exports.convertUserAttributeChangeEvent = convertUserAttributeChangeEvent;
 function convertUserIdentityChangeEvent(sdkEvent) {
     var commonEventData = convertBaseEventData(sdkEvent);
     var userIdentityChangeEvent = {
-        new: {
+        "new": {
             identity_type: sdkEvent.UserIdentityChanges.New.IdentityType,
             identity: sdkEvent.UserIdentityChanges.New.Identity || null,
             timestamp_unixtime_ms: sdkEvent.Timestamp,
-            created_this_batch:
-                sdkEvent.UserIdentityChanges.New.CreatedThisBatch,
+            created_this_batch: sdkEvent.UserIdentityChanges.New.CreatedThisBatch
         },
         old: {
             identity_type: sdkEvent.UserIdentityChanges.Old.IdentityType,
             identity: sdkEvent.UserIdentityChanges.Old.Identity || null,
             timestamp_unixtime_ms: sdkEvent.Timestamp,
-            created_this_batch:
-                sdkEvent.UserIdentityChanges.Old.CreatedThisBatch,
-        },
+            created_this_batch: sdkEvent.UserIdentityChanges.Old.CreatedThisBatch
+        }
     };
-    userIdentityChangeEvent = Object.assign(
-        userIdentityChangeEvent,
-        commonEventData
-    );
+    userIdentityChangeEvent = Object.assign(userIdentityChangeEvent, commonEventData);
     return {
         event_type: 'user_identity_change',
-        data: userIdentityChangeEvent,
+        data: userIdentityChangeEvent
     };
 }
 exports.convertUserIdentityChangeEvent = convertUserIdentityChangeEvent;
