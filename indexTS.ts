@@ -1,15 +1,18 @@
+const globalAny: any = global;
 const { Parser } = require('acorn');
 const fs = require('fs');
 const walk = require('acorn-walk');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 const { window } = new JSDOM();
-global.window = window;
+const documentPlan = require('./dataplan');
+globalAny.window = window;
 const mParticle = require('@mparticle/web-sdk');
 window.mParticle = mParticle;
-const dataPlanning = require('data-planning');
-
-console.log(dataPlanning);
+// const DataPlanService = require('./node_modules/data-planning/src/services/data_plan_service');
+import { DataPlanService } from './node_modules/data-planning/src/services/data_plan_service';
+// import * as dataPlan from '.';
+const dataPlanService = new DataPlanService();
 
 var MessageType = {
     SessionStart: 1,
@@ -26,14 +29,15 @@ var MessageType = {
     UserIdentityChange: 18,
 };
 
-fs.readFile('./test-ast.js', function(err, contents) {
+export default function returnValidations(contents: any): string {
+    console.log(contents);
     walk.simple(Parser.parse(contents), {
         ExpressionStatement(node) {
             if (node.expression.callee.object.name === 'mParticle') {
                 if (node.expression.callee.property.name === 'logEvent') {
                     //build args
-                    var args = [];
-                    var event = { messageType: MessageType.PageEvent };
+                    var args: any = [];
+                    var event: any = { messageType: MessageType.PageEvent };
 
                     node.expression.arguments.forEach((arg, i) => {
                         switch (arg.type) {
@@ -68,18 +72,31 @@ fs.readFile('./test-ast.js', function(err, contents) {
 
                     var batch = mParticle._BatchValidator.returnBatch(event);
 
-                    console.log('---batch---');
-                    console.log(batch);
+                    var model: any = {};
+                    model.batch = batch;
+                    model.document = documentPlan.version_document;
 
-                    batch.events.forEach(x => {
-                        console.log('---event---');
-                        console.log(x);
-                    });
-                    // eval(
-                    //     `${node.expression.callee.object.name}.${node.expression.callee.property.name}.apply(null, [${args}])`
+                    // console.log(model);
+                    debugger;
+                    console.log('hi');
+                    // var valiationObject = dataPlanService.executeDataPlan(
+                    //     123,
+                    //     123,
+                    //     123,
+                    //     model
+                    // );
+                    // console.log('---valiationObject---');
+                    // console.log(
+                    //     valiationObject.results[0].data.validation_errors[0]
+                    //         .validation_error_type
                     // );
                 }
             }
         },
     });
+    return 'hi there';
+}
+fs.readFile('./test-ast.js', function(err, contents) {
+    var validations = returnValidations(contents);
+    console.log(validations);
 });
