@@ -2,10 +2,11 @@
     "name": "ast-playground",
     "version": "1.0.0",
     "description": "",
-    "main": "test-ast.js",
+    "main": "src/indexTS.js",
     "scripts": {
         "dev": "webpack-dev-server --content-base dist/ --open",
-        "watch": "webpack -w"
+        "watch": "webpack -w",
+        "build": "tsc src/indexTS.ts"
     },
     "author": "",
     "license": "ISC",
@@ -16,6 +17,7 @@
         "fs": "0.0.1-security",
         "jsdom": "^15.2.1",
         "typescript": "^3.7.3",
+        "vscode-languageserver": "^5.2.1",
         "webpack": "^4.32.2"
     },
     "devDependencies": {

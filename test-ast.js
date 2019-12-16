@@ -4,5 +4,3 @@ mParticle.logEvent(
     { attrKey1: 'attrValue1', attrKey2: 'attrValue2' },
     { flagKey1: 'flagValue1', flagKey2: 'flagValue2' }
 );
-
-window.logEvent('ok');
