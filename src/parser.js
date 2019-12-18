@@ -1,17 +1,15 @@
 "use strict";
 exports.__esModule = true;
-var Parser = require('acorn').Parser;
-var fs = require('fs');
-var walk = require('acorn-walk');
-var jsdom = require('jsdom');
+var acorn_1 = require("acorn");
+var walk = require("acorn-walk");
+var jsdom = require("jsdom");
+var vscode_languageserver_1 = require("vscode-languageserver");
 var globalAny = global;
 var JSDOM = jsdom.JSDOM;
 var window = new JSDOM().window;
-var documentPlan = require('./dataplan');
 globalAny.window = window;
-var mParticle = require('@mparticle/web-sdk');
+var mParticle = require("@mparticle/web-sdk");
 window.mParticle = mParticle;
-var vscode_languageserver_1 = require("vscode-languageserver");
 var MessageType = {
     SessionStart: 1,
     SessionEnd: 2,
@@ -29,8 +27,7 @@ var MessageType = {
 function returnValidations(contents, textDocUri) {
     var diagnostics = [];
     var foundInvocations = {};
-    console.log(contents);
-    walk.simple(Parser.parse(contents.getText()), {
+    walk.simple(acorn_1.Parser.parse(contents.getText()), {
         ExpressionStatement: function (node) {
             var currentNodeArguments = {};
             if (node.expression.callee.object.name === 'mParticle') {
@@ -69,8 +66,7 @@ function returnValidations(contents, textDocUri) {
                                 return;
                         }
                     });
-                    // var batch = mParticle._BatchValidator.returnBatch(event);
-                    console.log('before validation object');
+                    var batch = mParticle._BatchValidator.returnBatch(event);
                     var validationObject = {
                         results: [
                             {
@@ -87,17 +83,12 @@ function returnValidations(contents, textDocUri) {
                             },
                         ]
                     };
-                    console.log(currentNodeArguments);
                     if (validationObject &&
                         Array.isArray(validationObject.results)) {
                         validationObject.results.forEach(function (result) {
-                            // console.log('result');
-                            // console.log(result);
                             if (result &&
                                 result.data &&
                                 Array.isArray(result.data.validation_errors)) {
-                                // console.log('validation_errors');
-                                // console.log(result.data.validation_errors);
                                 result.data.validation_errors.forEach(function (error) {
                                     if ((error.error_pointer =
                                         '#/data/event_name')) {
@@ -125,7 +116,6 @@ function returnValidations(contents, textDocUri) {
             }
         }
     });
-    console.log(diagnostics);
     return diagnostics;
 }
 exports["default"] = returnValidations;

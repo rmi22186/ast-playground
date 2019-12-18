@@ -2,25 +2,33 @@
     "name": "ast-playground",
     "version": "1.0.0",
     "description": "",
-    "main": "src/indexTS.js",
+    "main": "src/index.js",
     "scripts": {
         "dev": "webpack-dev-server --content-base dist/ --open",
-        "watch": "webpack -w",
-        "build": "tsc src/indexTS.ts"
+        "watch": "tsc src/index.ts -w",
+        "build": "tsc src/index.ts",
+        "test:watch": "jest --watchAll",
+        "test:clear": "jest --clearCache",
+        "test": "jest"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@types/jest": "^24.0.23",
         "@types/node": "^12.12.17",
         "acorn": "^7.1.0",
         "acorn-walk": "^7.0.0",
         "fs": "0.0.1-security",
+        "jest": "^24.9.0",
         "jsdom": "^15.2.1",
+        "save-dev": "0.0.1-security",
+        "ts-jest": "^24.2.0",
         "typescript": "^3.7.3",
         "vscode-languageserver": "^5.2.1",
         "webpack": "^4.32.2"
     },
     "devDependencies": {
+        "mocha": "^6.2.2",
         "webpack-cli": "^3.3.10"
     }
 }

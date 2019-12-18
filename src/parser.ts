@@ -1,19 +1,21 @@
-const { Parser } = require('acorn');
-const fs = require('fs');
-const walk = require('acorn-walk');
-const jsdom = require('jsdom');
-const globalAny: any = global;
-const { JSDOM } = jsdom;
-const { window } = new JSDOM();
-const documentPlan = require('./dataplan');
-globalAny.window = window;
-const mParticle = require('@mparticle/web-sdk');
-window.mParticle = mParticle;
+import { Parser } from 'acorn';
+import * as walk from 'acorn-walk';
+import * as jsdom from 'jsdom';
+import { documentPlan } from './dataplan';
 import {
     Diagnostic,
     DiagnosticSeverity,
     TextDocument,
 } from 'vscode-languageserver';
+
+const globalAny: any = global;
+const { JSDOM } = jsdom;
+const { window } = new JSDOM();
+globalAny.window = window;
+
+import * as mParticle from '@mparticle/web-sdk';
+window.mParticle = mParticle;
+
 // const DataPlanService = require('./node_modules/data-planning/src/services/data_plan_service');
 // import { DataPlanService } from './node_modules/data-planning/src/services/data_plan_service';
 // import * as dataPlan from '.';
@@ -44,7 +46,6 @@ export default function returnValidations(
 ): Diagnostic[] {
     var diagnostics: Diagnostic[] = [];
     var foundInvocations = {};
-    console.log(contents);
     walk.simple(Parser.parse(contents.getText()), {
         ExpressionStatement(node: any) {
             var currentNodeArguments: {
@@ -56,8 +57,8 @@ export default function returnValidations(
                 if (node.expression.callee.property.name === 'logEvent') {
                     var args: any = [];
                     var event: any = { messageType: MessageType.PageEvent };
-                    //build args
 
+                    //build args
                     node.expression.arguments.forEach((arg: any, i: any) => {
                         switch (arg.type) {
                             case 'Literal':
@@ -96,8 +97,8 @@ export default function returnValidations(
                         }
                     });
 
-                    // var batch = mParticle._BatchValidator.returnBatch(event);
-                    console.log('before validation object');
+                    var batch = mParticle._BatchValidator.returnBatch(event);
+
                     var validationObject: any = {
                         results: [
                             {
@@ -114,22 +115,17 @@ export default function returnValidations(
                             },
                         ],
                     };
-                    console.log(currentNodeArguments);
+
                     if (
                         validationObject &&
                         Array.isArray(validationObject.results)
                     ) {
                         validationObject.results.forEach(result => {
-                            // console.log('result');
-                            // console.log(result);
                             if (
                                 result &&
                                 result.data &&
                                 Array.isArray(result.data.validation_errors)
                             ) {
-                                // console.log('validation_errors');
-                                // console.log(result.data.validation_errors);
-
                                 result.data.validation_errors.forEach(error => {
                                     if (
                                         (error.error_pointer =
@@ -164,7 +160,6 @@ export default function returnValidations(
             }
         },
     });
-    console.log(diagnostics);
     return diagnostics;
 }
 // fs.readFile('./test-ast.js', function(err: any, contents: string) {
