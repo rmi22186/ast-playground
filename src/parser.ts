@@ -48,6 +48,9 @@ export default function returnValidations(
     var foundInvocations = {};
     walk.simple(Parser.parse(contents.getText()), {
         ExpressionStatement(node: any) {
+            console.log('---');
+            console.log(contents);
+            console.log('---');
             var currentNodeArguments: {
                 event_name?: Dictionary;
                 custom_attributes?: Dictionary;

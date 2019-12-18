@@ -28,6 +28,7 @@
         "webpack": "^4.32.2"
     },
     "devDependencies": {
+        "@types/vscode": "^1.41.0",
         "mocha": "^6.2.2",
         "webpack-cli": "^3.3.10"
     }

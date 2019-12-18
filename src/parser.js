@@ -29,6 +29,9 @@ function returnValidations(contents, textDocUri) {
     var foundInvocations = {};
     walk.simple(acorn_1.Parser.parse(contents.getText()), {
         ExpressionStatement: function (node) {
+            console.log('---');
+            console.log(contents);
+            console.log('---');
             var currentNodeArguments = {};
             if (node.expression.callee.object.name === 'mParticle') {
                 if (node.expression.callee.property.name === 'logEvent') {

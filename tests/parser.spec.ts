@@ -1,19 +1,32 @@
 import returnValidations from '../src/parser';
-import { Parser } from 'acorn';
-import * as fs from 'fs';
-import {
-    Diagnostic,
-    DiagnosticSeverity,
-    TextDocument,
-} from 'vscode-languageserver';
+import { TextDocuments } from 'vscode-languageserver';
+
+import { workspace } from 'vscode';
+
+let documents: TextDocuments = new TextDocuments();
 
 describe('Parser', () => {
     it('should be valid', () => {
-        fs.readFile('../test-ast', function(err, contents) {
-            var textDocument = Parser.parse(contents);
-            var validations = returnValidations(contents, 'uri');
-            console.log(validations);
+        workspace.openTextDocument('../test-ast').then(document => {
+            let text = document.getText();
+            console.log(text);
         });
+        // fs.readFile('../test-ast', function(err, contents) {
+        //     var stringOfDocument = Parser.parse(contents.toString());
+        //     var textDoc: TextDocument = {
+        //         uri: 'hi',
+        //         languageId: 'hi',
+        //         version: 1,
+        //         getText: function(range?) {
+        //             if (!range) {
+        //                 return stringOfDocument;
+        //             }
+        //         },
+        //         positionAt:
+        //     };
+        //     var validations = returnValidations(textDoc, 'uri');
+        //     console.log(validations);
+        // });
 
         console.log(returnValidations);
     });
