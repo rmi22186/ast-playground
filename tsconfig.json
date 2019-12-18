@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "es2015",
+        "target": "es6",
         "module": "commonjs",
         "moduleResolution": "node",
         "sourceMap": true,
@@ -9,6 +9,7 @@
         "noImplicitAny": false,
         "esModuleInterop": true,
         "resolveJsonModule": true,
-        "declaration": false
+        "declaration": false,
+        "types": ["vscode", "jest"]
     }
 }
