@@ -8,6 +8,7 @@ import {
     DiagnosticSeverity,
     TextDocument,
 } from 'vscode-languageserver';
+import * as dataPlanningNodeApp from 'data-planning';
 
 const globalAny: any = global;
 const { JSDOM } = jsdom;
@@ -47,6 +48,9 @@ export default function returnValidations(
     contents: TextDocument,
     textDocUri: string
 ): Diagnostic[] {
+    console.log('------');
+    console.log(dataPlanningNodeApp);
+    console.log('------');
     var diagnostics: Diagnostic[] = [];
     var foundInvocations = {};
     walk.simple(Parser.parse(contents.getText()), {
