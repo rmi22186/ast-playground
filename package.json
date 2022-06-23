@@ -13,7 +13,7 @@
         "acorn": "^7.1.0",
         "acorn-walk": "^7.0.0",
         "fs": "0.0.1-security",
-        "jsdom": "^15.2.1",
+        "jsdom": "^16.5.0",
         "webpack": "^4.32.2"
     },
     "devDependencies": {
