@@ -14,9 +14,9 @@
         "acorn-walk": "^7.0.0",
         "fs": "0.0.1-security",
         "jsdom": "^15.2.1",
-        "webpack": "^4.32.2"
+        "webpack": "^5.75.0"
     },
     "devDependencies": {
-        "webpack-cli": "^3.3.10"
+        "webpack-cli": "^5.0.1"
     }
 }
